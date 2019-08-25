@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EventSourcingDemo.Data.Domain
+namespace EventSourcingDemo.EventSourcing.Orders.Properties
 {
-    public class Product
+    public class Addon
     {
         public int Id { get; set; }
-        public DateTimeOffset DateCreated { get; set; }
-        public DateTimeOffset? DateUpdated { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
     }

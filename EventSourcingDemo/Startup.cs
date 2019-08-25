@@ -1,9 +1,13 @@
 using EventSourcingDemo.Data;
+using EventSourcingDemo.EventSourcing.Orders;
+using EventSourcingDemo.Util;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +28,7 @@ namespace EventSourcingDemo
         {
             services.AddDbContext<PkStoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            AddServices(services);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -32,6 +37,15 @@ namespace EventSourcingDemo
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddMediatR(typeof(Startup).Assembly);
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<IClock, SystemClock>();
+            services.AddScoped<PropertyTypeValidator>();
+            services.AddScoped<OrderStateRebuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
